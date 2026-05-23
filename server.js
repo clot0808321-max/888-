@@ -429,6 +429,43 @@ app.post('/admin/inventory/update', requireAdmin, (req, res) => {
   res.redirect('/admin/inventory?saved=1');
 });
 
+
+
+app.get('/admin/export/orders', requireAdmin, async (req, res) => {
+  const ExcelJS = require('exceljs');
+  const workbook = new ExcelJS.Workbook();
+  const sheet = workbook.addWorksheet('訂單管理');
+  sheet.columns = [
+    { header: '訂單ID', key: 'id', width: 12 },
+    { header: '會員名稱', key: 'customer_name', width: 20 },
+    { header: '電話', key: 'phone', width: 18 },
+    { header: '商品', key: 'items', width: 40 },
+    { header: '數量', key: 'qty', width: 10 },
+    { header: '總金額', key: 'total', width: 15 },
+    { header: '狀態', key: 'status', width: 15 },
+    { header: '下單時間', key: 'created_at', width: 25 }
+  ];
+
+  (db.orders || []).forEach(order => {
+    const items = (order.items || []).map(i => `${i.name} x${i.qty}`).join(', ');
+    const qty = (order.items || []).reduce((a,b)=>a+(b.qty||0),0);
+    sheet.addRow({
+      id: order.id,
+      customer_name: order.customer_name || order.name || '',
+      phone: order.phone || '',
+      items,
+      qty,
+      total: order.total || 0,
+      status: order.status || '未付款',
+      created_at: order.created_at || ''
+    });
+  });
+
+  res.setHeader('Content-Type','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  res.setHeader('Content-Disposition','attachment; filename=888台灣商店_訂單管理.xlsx');
+  await workbook.xlsx.write(res);
+  res.end();
+});
 app.get('/admin/export/inventory', requireAdmin, async (req, res) => {
   const ExcelJS = require('exceljs');
   const workbook = new ExcelJS.Workbook();
