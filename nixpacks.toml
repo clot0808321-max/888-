@@ -2,7 +2,7 @@
 nixPkgs = ["nodejs_20", "python3", "gcc", "gnumake", "pkg-config"]
 
 [phases.install]
-cmds = ["npm ci --omit=dev || npm install --omit=dev"]
+cmds = ["rm -rf node_modules package-lock.json", "npm install --omit=dev --no-audit --no-fund"]
 
 [start]
-cmd = "npm install --omit=dev && node server.js"
+cmd = "node server.js"

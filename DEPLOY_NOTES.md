@@ -1,42 +1,30 @@
-# Railway 部署注意
+# Railway 部署修正版
 
-這版已修正 Railway `Cannot find module 'express'` 問題：
+這版已修正 Railway runtime 重複 npm install 導致的：
 
-- 使用 Nixpacks
-- 強制 build 時執行 `npm ci` / `npm install`
-- 啟動前再次確認 `npm install --omit=dev`
-- 移除 Dockerfile，避免 Railway 誤用 Docker build
+- Cannot find module 'express'
+- npm error ENOTEMPTY node_modules/bl
+- npm error Exit handler never called
+
+## 重要
+
+請不要上傳 node_modules。
+請刪除 GitHub 上舊的 package-lock.json。
 
 ## Railway Variables
 
-```env
 PERSIST_DIR=/data
+RAILWAY_VOLUME_MOUNT_PATH=/data
 SQLITE_PATH=/data/shop.sqlite
 UPLOAD_DIR=/data/uploads
 SESSION_SECRET=888SHOP_SECRET_2026
-NIXPACKS_NODE_VERSION=20
-```
 
-## Volume
+不要設定 NIXPACKS_NODE_VERSION。
 
-Mount Path：
+## Railway Volume
 
-```text
-/data
-```
+Mount Path: /data
 
-## 上傳 GitHub
+## Start command
 
-不要上傳：
-
-```text
-node_modules
-```
-
-要上傳全部其他檔案。
-
-部署前建議 Railway：
-
-```text
-Settings → Clear Build Cache → Redeploy
-```
+node server.js
