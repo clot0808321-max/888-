@@ -405,6 +405,66 @@ app.post('/admin/products/sort', requireAdmin, (req, res) => {
   res.json({ ok: true });
 });
 
+// 商品庫存總表：連接商品資料與庫存數量，方便後台快速調整與匯出 Excel
+app.get('/admin/inventory', requireAdmin, (req, res) => {
+  const products = [...db.products]
+    .sort((a,b)=>(a.sort_order||999)-(b.sort_order||999) || b.id-a.id)
+    .map(productWithCategory);
+  const totalStock = products.reduce((sum, p) => sum + Number(p.stock || 0), 0);
+  const lowStock = products.filter(p => Number(p.stock || 0) <= 5).length;
+  res.render('admin-inventory', { products, totalStock, lowStock, saved: req.query.saved === '1' });
+});
+
+app.post('/admin/inventory/update', requireAdmin, (req, res) => {
+  const ids = Array.isArray(req.body.product_id) ? req.body.product_id : [req.body.product_id];
+  const stocks = Array.isArray(req.body.stock) ? req.body.stock : [req.body.stock];
+  const units = Array.isArray(req.body.unit) ? req.body.unit : [req.body.unit];
+  ids.forEach((id, index) => {
+    const p = db.products.find(x => x.id === Number(id));
+    if (!p) return;
+    p.stock = Math.max(0, Number.parseInt(stocks[index] ?? p.stock ?? 0, 10) || 0);
+    p.unit = units[index] || p.unit || '件';
+  });
+  saveDB(db);
+  res.redirect('/admin/inventory?saved=1');
+});
+
+app.get('/admin/export/inventory', requireAdmin, async (req, res) => {
+  const ExcelJS = require('exceljs');
+  const workbook = new ExcelJS.Workbook();
+  const sheet = workbook.addWorksheet('商品庫存表');
+  sheet.columns = [
+    { header: '商品ID', key: 'id', width: 10 },
+    { header: '商品名稱', key: 'name', width: 28 },
+    { header: '分類', key: 'category_name', width: 18 },
+    { header: '價格', key: 'price', width: 12 },
+    { header: '單位', key: 'unit', width: 10 },
+    { header: '目前庫存', key: 'stock', width: 12 },
+    { header: '排序', key: 'sort_order', width: 10 },
+    { header: '狀態', key: 'status', width: 12 },
+    { header: '建立時間', key: 'created_at', width: 22 }
+  ];
+  sheet.getRow(1).font = { bold: true };
+  [...db.products]
+    .sort((a,b)=>(a.sort_order||999)-(b.sort_order||999) || b.id-a.id)
+    .map(productWithCategory)
+    .forEach(p => sheet.addRow({
+      id: p.id,
+      name: p.name,
+      category_name: p.category_name,
+      price: Number(p.price || 0),
+      unit: p.unit || '件',
+      stock: Number(p.stock || 0),
+      sort_order: Number(p.sort_order || 999),
+      status: p.is_active ? '上架' : '下架',
+      created_at: p.created_at || ''
+    }));
+  res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  res.setHeader('Content-Disposition', encodeURI('attachment; filename="888台灣商店_商品庫存表.xlsx"'));
+  await workbook.xlsx.write(res);
+  res.end();
+});
+
 app.get('/admin/categories', requireAdmin, (req,res)=>res.render('admin-categories', { categories: categories() }));
 app.post('/admin/categories/new', requireAdmin, (req,res)=>{ db.categories.push({id:db.nextCategoryId++, name:req.body.name, sort_order:Number(req.body.sort_order||99)}); saveDB(db); res.redirect('/admin/categories'); });
 app.post('/admin/categories/:id/edit', requireAdmin, (req,res)=>{ const c=db.categories.find(x=>x.id===Number(req.params.id)); if(c){c.name=req.body.name;c.sort_order=Number(req.body.sort_order||99);saveDB(db)} res.redirect('/admin/categories'); });
