@@ -1,0 +1,47 @@
+<!doctype html><html lang="zh-Hant"><head><%- include('meta') %></head><body>
+<%- include('partials-header', {cartCount}) %>
+
+<section class="bj-hero">
+  <img src="<%= siteSettings.hero_image %>" alt="<%= siteSettings.store_name %>橫幅">
+</section>
+
+<section class="bj-news">
+  <a class="news-link" href="<%= siteSettings.news_link || siteSettings.tg_link %>" target="_blank" rel="noopener">
+    <span class="speaker">🔊NEWS</span>
+    <% if (siteSettings.marquee_enabled) { %>
+      <marquee><%= siteSettings.marquee_text || siteSettings.announcement_text %></marquee>
+    <% } else { %>
+      <div class="news-static"><%= siteSettings.announcement_text %></div>
+    <% } %>
+  </a>
+</section>
+
+<main class="bj-shop-shell">
+  <h1 class="bj-main-title"><%= siteSettings.store_name %>商品總覽</h1>
+
+  <div class="bj-product-layout" id="products">
+    <aside class="bj-category-side">
+      <input id="productSearch" class="bj-search" type="search" placeholder="搜尋內容..." autocomplete="off">
+      <a class="bj-cat-btn <%= !currentCat ? 'active' : '' %>" href="/#products">全部</a>
+      <% categories.forEach(c => { %>
+        <a class="bj-cat-btn <%= currentCat === c.id ? 'active' : '' %>" href="/?cat=<%= c.id %>#products"><%= c.name %></a>
+      <% }) %>
+    </aside>
+
+    <section class="bj-list-area" aria-label="商品列表">
+      <% if (products.length) { %>
+        <div class="bj-product-list">
+          <% products.forEach(p => { %><%- include('product-card', {p}) %><% }) %>
+        </div>
+        <div id="searchEmpty" class="empty bj-search-empty" style="display:none;">找不到符合搜尋的商品。</div>
+      <% } else { %>
+        <div class="empty">這個分類目前沒有商品。</div>
+      <% } %>
+    </section>
+  </div>
+</main>
+
+<a class="floating-tg" href="<%= siteSettings.tg_link %>" target="_blank" rel="noopener" aria-label="Telegram客服"><img src="<%= siteSettings.tg_icon %>" alt="Telegram客服"></a>
+<a class="floating-cart" href="/cart">🛒 <%= cartCount || 0 %></a>
+<script src="/js/main.js"></script>
+</body></html>

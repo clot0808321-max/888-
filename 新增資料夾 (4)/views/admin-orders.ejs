@@ -1,0 +1,63 @@
+<!doctype html><html lang="zh-Hant"><head><%- include('meta') %></head><body>
+<div class="admin-layout"><%- include('partials-admin-nav') %>
+<main class="admin-main excel-admin-page">
+  <div class="topline excel-toolbar">
+    <div>
+      <h1>訂單管理 Excel</h1>
+      <p class="muted">可搜尋訂單、查看商品明細、修改狀態，並匯出完整訂單 Excel。</p>
+    </div>
+    <div class="excel-actions">
+      <a class="btn" href="/admin/export/orders">匯出訂單 Excel</a>
+      <a class="btn ghost" href="/admin/export/inventory">商品庫存 Excel</a>
+    </div>
+  </div>
+
+  <form class="excel-filter" method="get" action="/admin/orders">
+    <input type="search" name="q" value="<%= q || '' %>" placeholder="搜尋訂單編號、客戶、電話、地址、備註...">
+    <select name="status">
+      <option value="">全部狀態</option>
+      <% orderStatuses.forEach(s => { %>
+        <option value="<%= s %>" <%= status === s ? 'selected' : '' %>><%= s %></option>
+      <% }) %>
+    </select>
+    <button class="btn small" type="submit">搜尋</button>
+    <a class="btn ghost small" href="/admin/orders">清除</a>
+  </form>
+
+  <div class="excel-table-wrap">
+    <table class="excel-table">
+      <thead>
+        <tr>
+          <th>編號</th><th>客戶</th><th>電話</th><th>購買商品</th><th>數量</th><th>金額</th><th>狀態</th><th>時間</th><th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% orders.forEach(o => { const items = orderItemMap[o.id] || []; %>
+          <tr>
+            <td>#<%= o.id %></td>
+            <td><%= o.customer_name %></td>
+            <td><%= o.phone %></td>
+            <td><a class="excel-link" href="/admin/orders/<%= o.id %>"><%= items.length ? items.map(i => i.product_name + '（' + stockLabel(i.stock_type) + '）x ' + i.quantity).join('、') : '查看購買商品' %></a></td>
+            <td><%= items.reduce((sum, i) => sum + Number(i.quantity || 0), 0) %></td>
+            <td>$<%= formatPrice(o.total) %></td>
+            <td>
+              <form class="status-form" action="/admin/orders/<%= o.id %>/status" method="post">
+                <input type="hidden" name="return_to" value="list">
+                <select name="status" onchange="this.form.submit()">
+                  <% orderStatuses.forEach(s => { %>
+                    <option value="<%= s %>" <%= (o.status || '新訂單') === s ? 'selected' : '' %>><%= s %></option>
+                  <% }) %>
+                </select>
+              </form>
+            </td>
+            <td><%= o.created_at %></td>
+            <td><a class="btn small" href="/admin/orders/<%= o.id %>">查看</a></td>
+          </tr>
+        <% }) %>
+        <% if (!orders.length) { %>
+          <tr><td colspan="9" class="empty-cell">目前沒有符合條件的訂單。</td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</main></div></body></html>
