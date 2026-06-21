@@ -1,73 +1,54 @@
-# Railway Volume 永久保存設定（888台灣商店）
+# Railway 永久保存設定（重要）
 
-## 1. Railway Volume 建立
+這個版本的網站程式已經支援 SQLite 永久資料庫與 uploads 圖片保存。
 
-1. 進入 Railway 專案
-2. 點你的 Web Service
-3. 找到 **Volumes**
-4. 新增 Volume
-5. Mount Path 請填：
+但要做到「後台新增商品後，重新部署也不消失」，Railway 必須要有真正的 Volume / Persistent Storage。
 
-```
+## 已支援的資料位置
+
+請在 Railway 建立 Volume，Mount Path 設定：
+
+```txt
 /data
 ```
 
-## 2. Railway Variables 設定
+再到 Variables 新增：
 
-請到 **Variables** 新增：
-
-```
+```txt
 PERSIST_DIR=/data
 SQLITE_PATH=/data/shop.sqlite
 UPLOAD_DIR=/data/uploads
-SESSION_SECRET=請改成一組很長的隨機字串
+SESSION_SECRET=自己設定一組很長的隨機字串
 ```
 
-## 3. 資料實際保存位置
+## 很重要
 
-SQLite：
+只新增 Variables 不等於永久保存。
 
-```
-/data/shop.sqlite
-```
+一定要有 Volume 掛載到 `/data`，否則：
 
-商品圖片 uploads：
-
-```
-/data/uploads
-```
-
-JSON 相容備份：
-
-```
-/data/shop-data.json
+```txt
+後台新增商品
+↓
+Railway 重新部署
+↓
+商品仍可能消失
 ```
 
-## 4. 重要說明
+## 如果你的 Railway 找不到 Volume
 
-- `public/uploads` 不再當正式永久圖片庫。
-- 程式會把 `/uploads/...` 指向 Railway Volume 的 `/data/uploads`。
-- 舊 JSON 結構仍會保留備份，方便回滾或人工檢查。
-- 第一次啟動時，如果 SQLite 是空的，會自動從舊 JSON 匯入資料。
+代表目前專案或方案沒有啟用 Persistent Storage。這種情況下：
 
-## 5. 測試方式
+- 商品資料只能暫存在 Railway 容器
+- GitHub Commit / Deploy 後仍可能重置
+- 建議先不要大量上架商品
+- 先改用支援 Volume 的 Railway 專案，或改用外部資料庫
 
-1. 登入後台新增一個商品與圖片
-2. 確認前台看得到商品
-3. 在 Railway 按 Restart
-4. 再重新打開網站
-5. 商品與圖片仍存在，即代表 Volume 永久保存成功
+## 測試方式
 
-## 6. 如果 Railway Build 失敗
-
-本版使用 `better-sqlite3`。請確認 Railway 使用 Node 20。`package.json` 已指定：
-
-```json
-"engines": { "node": "20.x" }
-```
-
-如果 Railway 仍使用其他版本，請在 Railway Variables 加：
-
-```
-NIXPACKS_NODE_VERSION=20
-```
+1. 後台新增一個測試商品
+2. 前台確認商品出現
+3. Railway Restart
+4. 商品還在：代表保存正常
+5. GitHub Commit 觸發 Deploy
+6. 商品還在：代表永久保存成功

@@ -197,5 +197,17 @@
       "username": "My999",
       "password_hash": "$2a$10$bt/HfvW.eQKYIxtFeacYV.H6JRK9TAha.K2gQqhz/hBoYagP2AHoW"
     }
-  ]
+  ],
+  "settings": {
+    "store_name": "888台灣商店",
+    "hero_image": "/images/new-hero.jpg",
+    "logo_image": "/uploads/logo.png",
+    "tg_icon": "/images/tg-plane-orange.png",
+    "tg_link": "https://t.me/TWSHOP888",
+    "service_link": "https://t.me/TWSHOP888",
+    "news_link": "https://t.me/TWSHOP888",
+    "announcement_text": "👍 外省運費實報實銷 👍　全區可配送｜商品價格與庫存請以下單頁面為準｜訂貨後商家會依照後台訂單安排出貨",
+    "marquee_text": "👍 外省運費實報實銷 👍　全區可配送｜商品價格與庫存請以下單頁面為準｜訂貨後商家會依照後台訂單安排出貨",
+    "marquee_enabled": 1
+  }
 }

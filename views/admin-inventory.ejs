@@ -19,12 +19,12 @@
     <div class="stat-card"><b>低庫存商品</b><strong><%= lowStock %></strong><span class="muted">庫存 ≤ 5</span></div>
   </div>
 
-  <p class="muted">此頁會連接商品資料與庫存數量。可直接修改庫存 / 單位，儲存後會同步到前台與下單扣庫存流程。</p>
+  <p class="muted">此頁會連接商品資料與庫存數量。可直接修改散裝庫存 / 整箱庫存 / 單位，儲存後會同步到前台與下單扣庫存流程。</p>
 
   <form method="post" action="/admin/inventory/update">
     <table>
       <thead>
-        <tr><th>ID</th><th>圖片</th><th>商品名稱</th><th>分類</th><th>價格 / 單位</th><th>庫存</th><th>狀態</th><th>修改</th></tr>
+        <tr><th>ID</th><th>圖片</th><th>商品名稱</th><th>分類</th><th>價格 / 單位</th><th>散裝</th><th>整箱</th><th>總庫存</th><th>狀態</th><th>修改</th></tr>
       </thead>
       <tbody>
         <% products.forEach(p => { %>
@@ -41,7 +41,9 @@
                 <% }) %>
               </select>
             </td>
-            <td><input type="number" name="stock" min="0" value="<%= p.stock || 0 %>" style="width:90px; padding:8px; border-radius:8px; border:1px solid #ddd;"></td>
+            <td><input type="number" name="loose_stock" min="0" value="<%= p.loose_stock || 0 %>" style="width:90px; padding:8px; border-radius:8px; border:1px solid #ddd;"></td>
+            <td><input type="number" name="box_stock" min="0" value="<%= p.box_stock || 0 %>" style="width:90px; padding:8px; border-radius:8px; border:1px solid #ddd;"></td>
+            <td><%= p.stock || 0 %></td>
             <td><%= p.is_active ? '上架' : '下架' %></td>
             <td><a href="/admin/products/<%= p.id %>/edit">商品修改</a></td>
           </tr>

@@ -10,11 +10,12 @@
     <% cart.forEach(item => { %>
       <div class="cart-row">
         <img src="<%= item.image || '/uploads/sample-1.svg' %>">
-        <div><strong><%= item.name %></strong><p>$<%= formatPrice(item.price) %> / <%= item.unit || '件' %></p></div>
+        <div><strong><%= item.name %></strong><p>$<%= formatPrice(item.price) %> / <%= item.unit || '件' %>｜<%= item.stock_label || stockLabel(item.stock_type) %></p></div>
         <input type="hidden" name="product_id" value="<%= item.product_id %>">
+        <input type="hidden" name="stock_type" value="<%= item.stock_type || 'loose' %>">
         <input type="number" name="quantity" value="<%= item.quantity %>" min="1">
         <div>$<%= formatPrice(item.price * item.quantity) %></div>
-        <button type="submit" formaction="/cart/remove" name="product_id" value="<%= item.product_id %>" class="danger">刪除</button>
+        <button type="submit" formaction="/cart/remove" name="remove_key" value="<%= item.product_id %>:<%= item.stock_type || 'loose' %>" class="danger">刪除</button>
       </div>
     <% }) %>
     <div class="cart-total">總金額：$<%= formatPrice(total) %></div>

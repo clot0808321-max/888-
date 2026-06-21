@@ -13,7 +13,7 @@
     </form>
     <div class="panel">
       <h2>訂單內容</h2>
-      <% cart.forEach(item => { %><p><%= item.name %> × <%= item.quantity %> <%= item.unit || '件' %> = $<%= formatPrice(item.price * item.quantity) %></p><% }) %>
+      <% cart.forEach(item => { %><p><%= item.name %>（<%= item.stock_label || stockLabel(item.stock_type) %>） × <%= item.quantity %> <%= item.unit || '件' %> = $<%= formatPrice(item.price * item.quantity) %></p><% }) %>
       <h3>總金額：$<%= formatPrice(total) %></h3>
     </div>
   </div>

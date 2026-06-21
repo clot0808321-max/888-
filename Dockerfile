@@ -16,6 +16,8 @@ RUN rm -f package-lock.json \
 COPY . .
 
 ENV NODE_ENV=production
+# 提醒 Railway / Docker：資料建議掛載到 /data
+VOLUME ["/data"]
 EXPOSE 3000
 
 CMD ["node", "server.js"]

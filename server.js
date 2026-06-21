@@ -36,6 +36,32 @@ const defaultCategories = [
   '生活用品區','泡麵、麵食區','藥品區','調味品、罐頭區','餅乾區','拜拜金紙區'
 ];
 
+
+function defaultSettings() {
+  return {
+    store_name: '888台灣商店',
+    hero_image: '/images/new-hero.jpg',
+    logo_image: '/uploads/logo.png',
+    tg_icon: '/images/tg-plane-orange.png',
+    tg_link: 'https://t.me/TWSHOP888',
+    service_link: 'https://t.me/TWSHOP888',
+    news_link: 'https://t.me/TWSHOP888',
+    announcement_text: '👍 外省運費實報實銷 👍　全區可配送｜商品價格與庫存請以下單頁面為準｜訂貨後商家會依照後台訂單安排出貨',
+    marquee_text: '👍 外省運費實報實銷 👍　全區可配送｜商品價格與庫存請以下單頁面為準｜訂貨後商家會依照後台訂單安排出貨',
+    marquee_enabled: 1
+  };
+}
+function normalizeSettings(settings) {
+  const fallback = defaultSettings();
+  settings = settings && typeof settings === 'object' ? settings : {};
+  const clean = { ...fallback, ...settings };
+  Object.keys(fallback).forEach(key => {
+    if (typeof fallback[key] === 'string') clean[key] = String(clean[key] || fallback[key]).trim() || fallback[key];
+  });
+  clean.marquee_enabled = clean.marquee_enabled ? 1 : 0;
+  return clean;
+}
+
 function defaultData() {
   const categories = defaultCategories.map((name, i) => ({ id: i + 1, name, sort_order: i + 1 }));
   const cid = (name) => categories.find(c => c.name === name).id;
@@ -43,16 +69,17 @@ function defaultData() {
     nextProductId: 9,
     nextCategoryId: 13,
     nextOrderId: 1,
+    settings: defaultSettings(),
     categories,
     products: [
-      {id:1,name:'黑松沙士',price:2,stock:24,description:'台灣經典汽水，冰過更好喝。',image:'/uploads/sample-1.svg',category_id:cid('飲料區'),is_active:1,created_at:new Date().toISOString()},
-      {id:2,name:'維力炸醬麵',price:3,stock:40,description:'台灣泡麵代表，快速方便。',image:'/uploads/sample-2.svg',category_id:cid('泡麵、麵食區'),is_active:1,created_at:new Date().toISOString()},
-      {id:3,name:'台灣米酒',price:8,stock:10,description:'料理常用酒品，購買請遵守當地法規。',image:'/uploads/sample-3.svg',category_id:cid('台灣來的酒'),is_active:1,created_at:new Date().toISOString()},
-      {id:4,name:'香菸展示品',price:5,stock:20,description:'年齡限制商品，請依所在地法律購買。',image:'/uploads/sample-4.svg',category_id:cid('香煙區'),is_active:1,created_at:new Date().toISOString()},
-      {id:5,name:'冷凍蔥抓餅',price:6,stock:15,description:'台灣早餐常見冷凍食品。',image:'/uploads/sample-5.svg',category_id:cid('冷凍食品區'),is_active:1,created_at:new Date().toISOString()},
-      {id:6,name:'金蘭醬油',price:4,stock:18,description:'台灣家用調味料。',image:'/uploads/sample-6.svg',category_id:cid('調味品、罐頭區'),is_active:1,created_at:new Date().toISOString()},
-      {id:7,name:'義美小泡芙',price:3,stock:35,description:'台灣人氣餅乾零食。',image:'/uploads/sample-7.svg',category_id:cid('餅乾區'),is_active:1,created_at:new Date().toISOString()},
-      {id:8,name:'拜拜金紙組',price:3,stock:30,description:'祭拜用品，適合家庭日常使用。',image:'/uploads/sample-8.svg',category_id:cid('拜拜金紙區'),is_active:1,created_at:new Date().toISOString()}
+      {id:1,name:'黑松沙士',price:2,stock:24,loose_stock:24,box_stock:0,description:'台灣經典汽水，冰過更好喝。',image:'/uploads/sample-1.svg',category_id:cid('飲料區'),is_active:1,created_at:new Date().toISOString()},
+      {id:2,name:'維力炸醬麵',price:3,stock:40,loose_stock:40,box_stock:0,description:'台灣泡麵代表，快速方便。',image:'/uploads/sample-2.svg',category_id:cid('泡麵、麵食區'),is_active:1,created_at:new Date().toISOString()},
+      {id:3,name:'台灣米酒',price:8,stock:10,loose_stock:10,box_stock:0,description:'料理常用酒品，購買請遵守當地法規。',image:'/uploads/sample-3.svg',category_id:cid('台灣來的酒'),is_active:1,created_at:new Date().toISOString()},
+      {id:4,name:'香菸展示品',price:5,stock:20,loose_stock:20,box_stock:0,description:'年齡限制商品，請依所在地法律購買。',image:'/uploads/sample-4.svg',category_id:cid('香煙區'),is_active:1,created_at:new Date().toISOString()},
+      {id:5,name:'冷凍蔥抓餅',price:6,stock:15,loose_stock:15,box_stock:0,description:'台灣早餐常見冷凍食品。',image:'/uploads/sample-5.svg',category_id:cid('冷凍食品區'),is_active:1,created_at:new Date().toISOString()},
+      {id:6,name:'金蘭醬油',price:4,stock:18,loose_stock:18,box_stock:0,description:'台灣家用調味料。',image:'/uploads/sample-6.svg',category_id:cid('調味品、罐頭區'),is_active:1,created_at:new Date().toISOString()},
+      {id:7,name:'義美小泡芙',price:3,stock:35,loose_stock:35,box_stock:0,description:'台灣人氣餅乾零食。',image:'/uploads/sample-7.svg',category_id:cid('餅乾區'),is_active:1,created_at:new Date().toISOString()},
+      {id:8,name:'拜拜金紙組',price:3,stock:30,loose_stock:30,box_stock:0,description:'祭拜用品，適合家庭日常使用。',image:'/uploads/sample-8.svg',category_id:cid('拜拜金紙區'),is_active:1,created_at:new Date().toISOString()}
     ],
     orders: [],
     order_items: [],
@@ -67,10 +94,18 @@ function normalizeData(data) {
   data.orders = Array.isArray(data.orders) ? data.orders : [];
   data.order_items = Array.isArray(data.order_items) ? data.order_items : [];
   data.admins = Array.isArray(data.admins) && data.admins.length ? data.admins : fallback.admins;
+  data.settings = normalizeSettings(data.settings || fallback.settings);
   data.products.forEach((p, i) => {
     p.id = Number(p.id);
     p.price = parsePrice(p.price);
-    p.stock = Math.max(0, Number.parseInt(p.stock ?? 0, 10) || 0);
+    const oldStock = parseStock(p.stock);
+    const rawLoose = p.loose_stock;
+    const rawBox = p.box_stock;
+    p.loose_stock = rawLoose === undefined ? oldStock : parseStock(rawLoose);
+    p.box_stock = rawBox === undefined ? 0 : parseStock(rawBox);
+    // 舊版資料庫升級時，可能只有 stock 有數量，loose_stock/box_stock 是 0；自動轉到散裝庫存，避免商品看起來變 0。
+    if (oldStock > 0 && p.loose_stock === 0 && p.box_stock === 0) p.loose_stock = oldStock;
+    p.stock = p.loose_stock + p.box_stock;
     p.unit = p.unit || '件';
     p.sort_order = Number(p.sort_order || i + 1);
     p.is_active = p.is_active ? 1 : 0;
@@ -78,7 +113,7 @@ function normalizeData(data) {
   });
   data.categories.forEach((c, i) => { c.id = Number(c.id); c.sort_order = Number(c.sort_order || i + 1); });
   data.orders.forEach(o => { o.id = Number(o.id); o.total = parsePrice(o.total); });
-  data.order_items.forEach((i, idx) => { i.id = Number(i.id || idx + 1); i.order_id = Number(i.order_id); i.product_id = Number(i.product_id); i.price = parsePrice(i.price); i.quantity = Number(i.quantity || 1); i.subtotal = parsePrice(i.subtotal); });
+  data.order_items.forEach((i, idx) => { i.id = Number(i.id || idx + 1); i.order_id = Number(i.order_id); i.product_id = Number(i.product_id); i.price = parsePrice(i.price); i.quantity = Number(i.quantity || 1); i.stock_type = i.stock_type || 'loose'; i.subtotal = parsePrice(i.subtotal); });
   data.nextProductId = Number(data.nextProductId || (Math.max(0, ...data.products.map(p => p.id || 0)) + 1));
   data.nextCategoryId = Number(data.nextCategoryId || (Math.max(0, ...data.categories.map(c => c.id || 0)) + 1));
   data.nextOrderId = Number(data.nextOrderId || (Math.max(0, ...data.orders.map(o => o.id || 0)) + 1));
@@ -94,6 +129,8 @@ function initSQLite() {
       name TEXT NOT NULL,
       price REAL NOT NULL DEFAULT 0,
       stock INTEGER NOT NULL DEFAULT 0,
+      loose_stock INTEGER NOT NULL DEFAULT 0,
+      box_stock INTEGER NOT NULL DEFAULT 0,
       unit TEXT NOT NULL DEFAULT '件',
       description TEXT DEFAULT '',
       image TEXT DEFAULT '',
@@ -119,13 +156,18 @@ function initSQLite() {
       product_name TEXT,
       price REAL NOT NULL DEFAULT 0,
       quantity INTEGER NOT NULL DEFAULT 1,
+      stock_type TEXT DEFAULT 'loose',
       subtotal REAL NOT NULL DEFAULT 0
     );
     CREATE TABLE IF NOT EXISTS admins (id INTEGER PRIMARY KEY, username TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL);
   `);
   const productCols = sqlite.prepare('PRAGMA table_info(products)').all().map(c => c.name);
   if (!productCols.includes('unit')) sqlite.exec("ALTER TABLE products ADD COLUMN unit TEXT NOT NULL DEFAULT '件'");
+  if (!productCols.includes('loose_stock')) sqlite.exec('ALTER TABLE products ADD COLUMN loose_stock INTEGER NOT NULL DEFAULT 0');
+  if (!productCols.includes('box_stock')) sqlite.exec('ALTER TABLE products ADD COLUMN box_stock INTEGER NOT NULL DEFAULT 0');
   if (!productCols.includes('sort_order')) sqlite.exec('ALTER TABLE products ADD COLUMN sort_order INTEGER DEFAULT 999');
+  const orderItemCols = sqlite.prepare('PRAGMA table_info(order_items)').all().map(c => c.name);
+  if (!orderItemCols.includes('stock_type')) sqlite.exec("ALTER TABLE order_items ADD COLUMN stock_type TEXT DEFAULT 'loose'");
 }
 
 function readJSONSeed() {
@@ -143,6 +185,7 @@ function loadDBFromSQLite() {
     nextProductId: Number(sqlite.prepare("SELECT value FROM meta WHERE key='nextProductId'").get()?.value || 0),
     nextCategoryId: Number(sqlite.prepare("SELECT value FROM meta WHERE key='nextCategoryId'").get()?.value || 0),
     nextOrderId: Number(sqlite.prepare("SELECT value FROM meta WHERE key='nextOrderId'").get()?.value || 0),
+    settings: (() => { try { return JSON.parse(sqlite.prepare("SELECT value FROM meta WHERE key='settings'").get()?.value || '{}'); } catch { return {}; } })(),
     categories: sqlite.prepare('SELECT * FROM categories ORDER BY sort_order ASC, id ASC').all(),
     products: sqlite.prepare('SELECT * FROM products ORDER BY sort_order ASC, id DESC').all(),
     orders: sqlite.prepare('SELECT * FROM orders ORDER BY id DESC').all(),
@@ -164,16 +207,17 @@ function saveDB(data) {
     meta.run('nextProductId', String(d.nextProductId));
     meta.run('nextCategoryId', String(d.nextCategoryId));
     meta.run('nextOrderId', String(d.nextOrderId));
+    meta.run('settings', JSON.stringify(normalizeSettings(d.settings)));
     const cat = sqlite.prepare('INSERT INTO categories(id,name,sort_order) VALUES(@id,@name,@sort_order)');
-    const prod = sqlite.prepare(`INSERT INTO products(id,name,price,stock,unit,description,image,category_id,sort_order,is_active,created_at)
-      VALUES(@id,@name,@price,@stock,@unit,@description,@image,@category_id,@sort_order,@is_active,@created_at)`);
+    const prod = sqlite.prepare(`INSERT INTO products(id,name,price,stock,loose_stock,box_stock,unit,description,image,category_id,sort_order,is_active,created_at)
+      VALUES(@id,@name,@price,@stock,@loose_stock,@box_stock,@unit,@description,@image,@category_id,@sort_order,@is_active,@created_at)`);
     const ord = sqlite.prepare(`INSERT INTO orders(id,customer_name,phone,address,note,total,status,created_at)
       VALUES(@id,@customer_name,@phone,@address,@note,@total,@status,@created_at)`);
-    const item = sqlite.prepare(`INSERT INTO order_items(id,order_id,product_id,product_name,price,quantity,subtotal)
-      VALUES(@id,@order_id,@product_id,@product_name,@price,@quantity,@subtotal)`);
+    const item = sqlite.prepare(`INSERT INTO order_items(id,order_id,product_id,product_name,price,quantity,stock_type,subtotal)
+      VALUES(@id,@order_id,@product_id,@product_name,@price,@quantity,@stock_type,@subtotal)`);
     const admin = sqlite.prepare('INSERT INTO admins(id,username,password_hash) VALUES(@id,@username,@password_hash)');
     d.categories.forEach(x => cat.run(x));
-    d.products.forEach(x => prod.run(x));
+    d.products.forEach(x => prod.run(syncStock(x)));
     d.orders.forEach(x => ord.run(x));
     d.order_items.forEach(x => item.run(x));
     d.admins.forEach(x => admin.run(x));
@@ -244,11 +288,32 @@ function productWithCategory(p) {
   const c = db.categories.find(x => x.id === Number(p.category_id));
   return { ...p, category_name: c ? c.name : '未分類' };
 }
+function getStockByType(product, type){
+  return type === 'box' ? parseStock(product.box_stock) : parseStock(product.loose_stock);
+}
+function setStockByType(product, type, value){
+  if (type === 'box') product.box_stock = parseStock(value);
+  else product.loose_stock = parseStock(value);
+  syncStock(product);
+}
 function now(){ return new Date().toLocaleString('zh-TW', { hour12:false }); }
 function parsePrice(value){
   const price = Number.parseFloat(String(value ?? '0').replace(',', '.'));
   if (!Number.isFinite(price) || price < 0) return 0;
   return Math.round(price * 100) / 100;
+}
+function parseStock(value){
+  const n = Number.parseInt(value ?? 0, 10);
+  return Number.isFinite(n) && n > 0 ? n : 0;
+}
+function syncStock(product){
+  product.loose_stock = parseStock(product.loose_stock);
+  product.box_stock = parseStock(product.box_stock);
+  product.stock = product.loose_stock + product.box_stock;
+  return product;
+}
+function stockLabel(type){
+  return type === 'box' ? '整箱' : '散';
 }
 function money(value){
   const n = Number(value || 0);
@@ -261,6 +326,10 @@ function calcSubtotal(item){
   return Math.round(parsePrice(item.price) * Number(item.quantity || 0) * 100) / 100;
 }
 app.locals.formatPrice = money;
+app.locals.stockLabel = stockLabel;
+function getSiteSettings(){ return normalizeSettings(db.settings); }
+app.locals.getSiteSettings = getSiteSettings;
+app.use((req, res, next) => { res.locals.siteSettings = getSiteSettings(); next(); });
 
 app.get('/', (req, res) => {
   const cat = req.query.cat ? Number(req.query.cat) : null;
@@ -284,14 +353,16 @@ app.get('/product/:id', (req, res) => {
 app.post('/cart/add', (req, res) => {
   const productId = Number(req.body.product_id);
   const quantity = Math.max(1, Number(req.body.quantity || 1));
+  const stockType = req.body.stock_type === 'box' ? 'box' : 'loose';
   const product = db.products.find(p => p.id === productId && p.is_active);
   if (!product) return res.redirect('/');
+  const available = getStockByType(product, stockType);
   const cart = getCart(req);
-  const item = cart.find(i => i.product_id === productId);
+  const item = cart.find(i => i.product_id === productId && (i.stock_type || 'loose') === stockType);
   const currentQty = item ? Number(item.quantity || 0) : 0;
-  if (currentQty + quantity > Number(product.stock || 0)) return res.redirect('/cart?error=stock');
+  if (currentQty + quantity > available) return res.redirect('/cart?error=stock');
   if (item) item.quantity += quantity;
-  else cart.push({ product_id: product.id, name: product.name, price: product.price, image: product.image, unit: product.unit || '件', quantity });
+  else cart.push({ product_id: product.id, name: product.name, price: product.price, image: product.image, unit: product.unit || '件', stock_type: stockType, stock_label: stockLabel(stockType), quantity });
   res.redirect('/cart');
 });
 
@@ -304,13 +375,15 @@ app.get('/cart', (req, res) => {
 app.post('/cart/update', (req, res) => {
   const cart = getCart(req);
   const ids = Array.isArray(req.body.product_id) ? req.body.product_id : [req.body.product_id];
+  const types = Array.isArray(req.body.stock_type) ? req.body.stock_type : [req.body.stock_type];
   const qtys = Array.isArray(req.body.quantity) ? req.body.quantity : [req.body.quantity];
   req.session.cart = cart.map(item => {
-    const idx = ids.findIndex(id => Number(id) === item.product_id);
+    const itemType = item.stock_type || 'loose';
+    const idx = ids.findIndex((id, index) => Number(id) === item.product_id && (types[index] || 'loose') === itemType);
     if (idx >= 0) {
       const p = db.products.find(x => x.id === item.product_id);
       const want = Math.max(1, Number(qtys[idx] || 1));
-      item.quantity = p ? Math.min(want, Math.max(0, Number(p.stock || 0))) : want;
+      item.quantity = p ? Math.min(want, getStockByType(p, itemType)) : want;
     }
     return item;
   });
@@ -318,7 +391,10 @@ app.post('/cart/update', (req, res) => {
 });
 
 app.post('/cart/remove', (req, res) => {
-  req.session.cart = getCart(req).filter(i => i.product_id !== Number(req.body.product_id));
+  const [rawId, rawType] = String(req.body.remove_key || '').split(':');
+  const productId = Number(rawId || req.body.product_id);
+  const stockType = rawType === 'box' ? 'box' : 'loose';
+  req.session.cart = getCart(req).filter(i => !(i.product_id === productId && (i.stock_type || 'loose') === stockType));
   res.redirect('/cart');
 });
 
@@ -334,7 +410,7 @@ app.post('/checkout', (req, res) => {
   if (!cart.length) return res.redirect('/cart');
   const insufficient = cart.find(item => {
     const p = db.products.find(x => x.id === item.product_id && x.is_active);
-    return !p || Number(item.quantity || 0) > Number(p.stock || 0);
+    return !p || Number(item.quantity || 0) > getStockByType(p, item.stock_type || 'loose');
   });
   if (insufficient) return res.redirect('/checkout?error=stock');
   const total = calcTotal(cart);
@@ -342,9 +418,10 @@ app.post('/checkout', (req, res) => {
   const order = { id: orderId, customer_name:req.body.customer_name, phone:req.body.phone, address:req.body.address, note:req.body.note||'', total, status:'新訂單', created_at: now() };
   db.orders.push(order);
   cart.forEach(item => {
-    db.order_items.push({ id: db.order_items.length+1, order_id: orderId, product_id:item.product_id, product_name:item.name, price:parsePrice(item.price), quantity:item.quantity, subtotal:calcSubtotal(item) });
+    const itemType = item.stock_type || 'loose';
+    db.order_items.push({ id: db.order_items.length+1, order_id: orderId, product_id:item.product_id, product_name:item.name, price:parsePrice(item.price), quantity:item.quantity, stock_type:itemType, subtotal:calcSubtotal(item) });
     const p = db.products.find(x => x.id === item.product_id);
-    if (p) p.stock = Math.max((p.stock || 0) - item.quantity, 0);
+    if (p) setStockByType(p, itemType, getStockByType(p, itemType) - item.quantity);
   });
   saveDB(db);
   req.session.cart = [];
@@ -368,6 +445,34 @@ app.get('/admin', requireAdmin, (req, res) => {
   res.render('admin-dashboard', { admin: req.session.admin, productTotal, orderTotal, newOrders, recentOrders });
 });
 
+
+app.get('/admin/settings', requireAdmin, (req, res) => {
+  res.render('admin-settings', { settings: getSiteSettings(), saved: req.query.saved === '1' });
+});
+app.post('/admin/settings', requireAdmin, upload.fields([
+  { name: 'hero_image', maxCount: 1 },
+  { name: 'logo_image', maxCount: 1 },
+  { name: 'tg_icon', maxCount: 1 }
+]), (req, res) => {
+  const current = getSiteSettings();
+  const fileUrl = (field, fallback) => req.files && req.files[field] && req.files[field][0] ? '/uploads/' + req.files[field][0].filename : fallback;
+  db.settings = normalizeSettings({
+    ...current,
+    store_name: req.body.store_name,
+    tg_link: req.body.tg_link,
+    service_link: req.body.service_link,
+    news_link: req.body.news_link,
+    announcement_text: req.body.announcement_text,
+    marquee_text: req.body.marquee_text,
+    marquee_enabled: req.body.marquee_enabled ? 1 : 0,
+    hero_image: fileUrl('hero_image', current.hero_image),
+    logo_image: fileUrl('logo_image', current.logo_image),
+    tg_icon: fileUrl('tg_icon', current.tg_icon)
+  });
+  saveDB(db);
+  res.redirect('/admin/settings?saved=1');
+});
+
 app.get('/admin/products', requireAdmin, (req, res) => {
   const products = [...db.products].sort((a,b)=>(a.sort_order||999)-(b.sort_order||999) || b.id-a.id).map(productWithCategory);
   res.render('admin-products', { products });
@@ -376,7 +481,9 @@ app.get('/admin/products/new', requireAdmin, (req, res) => res.render('admin-pro
 app.post('/admin/products/new', requireAdmin, upload.single('image'), (req, res) => {
   const image = req.file ? '/uploads/' + req.file.filename : '';
   const nextSort = Math.max(0, ...db.products.map(p => Number(p.sort_order || 0))) + 1;
-  db.products.push({ id: db.nextProductId++, name:req.body.name, price:parsePrice(req.body.price), stock:Math.max(0, Number(req.body.stock || 0)), unit:req.body.unit || '件', description:req.body.description||'', image, category_id:Number(req.body.category_id), sort_order:nextSort, is_active:req.body.is_active?1:0, created_at: now() });
+  const looseStock = parseStock(req.body.loose_stock ?? req.body.stock);
+  const boxStock = parseStock(req.body.box_stock);
+  db.products.push(syncStock({ id: db.nextProductId++, name:req.body.name, price:parsePrice(req.body.price), stock:0, loose_stock:looseStock, box_stock:boxStock, unit:req.body.unit || '件', description:req.body.description||'', image, category_id:Number(req.body.category_id), sort_order:nextSort, is_active:req.body.is_active?1:0, created_at: now() }));
   saveDB(db);
   res.redirect('/admin/products');
 });
@@ -388,7 +495,7 @@ app.get('/admin/products/:id/edit', requireAdmin, (req, res) => {
 app.post('/admin/products/:id/edit', requireAdmin, upload.single('image'), (req, res) => {
   const p = db.products.find(x=>x.id===Number(req.params.id));
   if (!p) return res.redirect('/admin/products');
-  p.name=req.body.name; p.price=parsePrice(req.body.price); p.stock=Math.max(0, Number(req.body.stock || 0)); p.unit=req.body.unit || '件'; p.description=req.body.description||''; p.category_id=Number(req.body.category_id); p.is_active=req.body.is_active?1:0;
+  p.name=req.body.name; p.price=parsePrice(req.body.price); p.loose_stock=parseStock(req.body.loose_stock ?? req.body.stock); p.box_stock=parseStock(req.body.box_stock); p.unit=req.body.unit || '件'; p.description=req.body.description||''; p.category_id=Number(req.body.category_id); p.is_active=req.body.is_active?1:0; syncStock(p);
   if (req.file) p.image = '/uploads/' + req.file.filename;
   saveDB(db);
   res.redirect('/admin/products');
@@ -417,13 +524,16 @@ app.get('/admin/inventory', requireAdmin, (req, res) => {
 
 app.post('/admin/inventory/update', requireAdmin, (req, res) => {
   const ids = Array.isArray(req.body.product_id) ? req.body.product_id : [req.body.product_id];
-  const stocks = Array.isArray(req.body.stock) ? req.body.stock : [req.body.stock];
+  const looseStocks = Array.isArray(req.body.loose_stock) ? req.body.loose_stock : [req.body.loose_stock];
+  const boxStocks = Array.isArray(req.body.box_stock) ? req.body.box_stock : [req.body.box_stock];
   const units = Array.isArray(req.body.unit) ? req.body.unit : [req.body.unit];
   ids.forEach((id, index) => {
     const p = db.products.find(x => x.id === Number(id));
     if (!p) return;
-    p.stock = Math.max(0, Number.parseInt(stocks[index] ?? p.stock ?? 0, 10) || 0);
+    p.loose_stock = parseStock(looseStocks[index] ?? p.loose_stock ?? 0);
+    p.box_stock = parseStock(boxStocks[index] ?? p.box_stock ?? 0);
     p.unit = units[index] || p.unit || '件';
+    syncStock(p);
   });
   saveDB(db);
   res.redirect('/admin/inventory?saved=1');
@@ -439,7 +549,9 @@ app.get('/admin/export/inventory', requireAdmin, async (req, res) => {
     { header: '分類', key: 'category_name', width: 18 },
     { header: '價格', key: 'price', width: 12 },
     { header: '單位', key: 'unit', width: 10 },
-    { header: '目前庫存', key: 'stock', width: 12 },
+    { header: '散裝庫存', key: 'loose_stock', width: 12 },
+    { header: '整箱庫存', key: 'box_stock', width: 12 },
+    { header: '總庫存', key: 'stock', width: 12 },
     { header: '排序', key: 'sort_order', width: 10 },
     { header: '狀態', key: 'status', width: 12 },
     { header: '建立時間', key: 'created_at', width: 22 }
@@ -454,6 +566,8 @@ app.get('/admin/export/inventory', requireAdmin, async (req, res) => {
       category_name: p.category_name,
       price: Number(p.price || 0),
       unit: p.unit || '件',
+      loose_stock: Number(p.loose_stock || 0),
+      box_stock: Number(p.box_stock || 0),
       stock: Number(p.stock || 0),
       sort_order: Number(p.sort_order || 999),
       status: p.is_active ? '上架' : '下架',
@@ -527,7 +641,7 @@ app.get('/admin/export/orders', requireAdmin, async (req, res) => {
       phone: o.phone || '',
       address: o.address || '',
       note: o.note || '',
-      items: items.map(i => `${i.product_name} x ${i.quantity}（$${money(i.subtotal)}）`).join('\n'),
+      items: items.map(i => `${i.product_name}（${stockLabel(i.stock_type)}） x ${i.quantity}（$${money(i.subtotal)}）`).join('\n'),
       quantity: items.reduce((sum, i) => sum + Number(i.quantity || 0), 0),
       total: Number(o.total || 0),
       status: o.status || '新訂單',

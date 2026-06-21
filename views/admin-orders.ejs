@@ -37,7 +37,7 @@
             <td>#<%= o.id %></td>
             <td><%= o.customer_name %></td>
             <td><%= o.phone %></td>
-            <td><a class="excel-link" href="/admin/orders/<%= o.id %>"><%= items.length ? items.map(i => i.product_name + ' x ' + i.quantity).join('、') : '查看購買商品' %></a></td>
+            <td><a class="excel-link" href="/admin/orders/<%= o.id %>"><%= items.length ? items.map(i => i.product_name + '（' + stockLabel(i.stock_type) + '）x ' + i.quantity).join('、') : '查看購買商品' %></a></td>
             <td><%= items.reduce((sum, i) => sum + Number(i.quantity || 0), 0) %></td>
             <td>$<%= formatPrice(o.total) %></td>
             <td>

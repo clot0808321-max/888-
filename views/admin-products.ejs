@@ -3,9 +3,9 @@
 <main class="admin-main">
   <div class="topline"><h1>商品管理</h1><a class="btn" href="/admin/products/new">新增商品</a></div>
   <p class="muted">提示：按住商品列可上下拖曳排序，放開後會自動儲存，前台會同步顯示。</p>
-  <table><thead><tr><th>排序</th><th>圖片</th><th>名稱</th><th>分類</th><th>價格</th><th>庫存</th><th>狀態</th><th>操作</th></tr></thead><tbody id="product-sort-list">
+  <table><thead><tr><th>排序</th><th>圖片</th><th>名稱</th><th>分類</th><th>價格</th><th>散裝</th><th>整箱</th><th>總庫存</th><th>狀態</th><th>操作</th></tr></thead><tbody id="product-sort-list">
   <% products.forEach(p => { %>
-    <tr draggable="true" data-id="<%= p.id %>"><td class="drag-handle">☰</td><td><img class="thumb" src="<%= p.image || '/uploads/sample-1.svg' %>"></td><td><%= p.name %></td><td><%= p.category_name %></td><td>$<%= formatPrice(p.price) %> / <%= p.unit || '件' %></td><td><%= p.stock %></td><td><%= p.is_active ? '上架' : '下架' %></td>
+    <tr draggable="true" data-id="<%= p.id %>"><td class="drag-handle">☰</td><td><img class="thumb" src="<%= p.image || '/uploads/sample-1.svg' %>"></td><td><%= p.name %></td><td><%= p.category_name %></td><td>$<%= formatPrice(p.price) %> / <%= p.unit || '件' %></td><td><%= p.loose_stock || 0 %></td><td><%= p.box_stock || 0 %></td><td><%= p.stock || 0 %></td><td><%= p.is_active ? '上架' : '下架' %></td>
     <td><a href="/admin/products/<%= p.id %>/edit">修改</a>
     <form class="inline" action="/admin/products/<%= p.id %>/delete" method="post" onsubmit="return confirm('確定刪除？')"><button class="link-danger">刪除</button></form></td></tr>
   <% }) %></tbody></table>
