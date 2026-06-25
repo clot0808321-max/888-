@@ -628,3 +628,29 @@ img,video,iframe{max-width:100%!important;}
   .bj-card-bottom .price-line{min-width:62px!important;font-size:14px!important;padding:0 6px!important;}
   .stock-type-select{font-size:12px!important;padding:0 6px!important;}
 }
+
+/* === 2026-06 mobile alignment fix: category sidebar aligns with first product === */
+@media (max-width: 760px){
+  .bj-product-layout{
+    align-items:start!important;
+  }
+  .bj-category-side{
+    position:static!important;
+    top:auto!important;
+    align-self:start!important;
+    margin-top:0!important;
+    padding-top:0!important;
+    transform:none!important;
+  }
+  .bj-list-area,
+  .bj-product-list{
+    margin-top:0!important;
+    padding-top:0!important;
+  }
+  .bj-search{
+    margin-top:0!important;
+  }
+  .catalog-card.bj-item:first-child{
+    margin-top:0!important;
+  }
+}
