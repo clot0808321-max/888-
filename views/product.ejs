@@ -1,9 +1,10 @@
 <!doctype html><html lang="zh-Hant"><head><%- include('meta') %></head><body>
 <%- include('partials-header', {cartCount}) %>
-<main class="container detail">
-  <a class="btn back-btn" href="javascript:history.back()">← 返回上一頁</a>
-  <img class="detail-img" src="<%= product.image || '/uploads/sample-1.svg' %>" alt="<%= product.name %>">
-  <section>
+<main class="container detail product-detail-page">
+  <div class="detail-image-box">
+    <img class="detail-img" src="<%= product.image || '/uploads/sample-1.svg' %>" alt="<%= product.name %>">
+  </div>
+  <section class="detail-info">
     <span class="tag"><%= product.category_name %></span>
     <h1><%= product.name %></h1>
     <div class="price big">$<%= formatPrice(product.price) %> / <%= product.unit || '件' %></div>
@@ -11,21 +12,26 @@
       <%= product.stock > 0 ? ('散裝：' + (product.loose_stock || 0) + '　整箱：' + (product.box_stock || 0)) : '已售完' %>
     </p>
     <p class="desc"><%= product.description %></p>
-    <form class="buy-box" action="/cart/add" method="post">
+    <form class="buy-box detail-buy-box" action="/cart/add" method="post">
       <input type="hidden" name="product_id" value="<%= product.id %>">
-      <label>購買類型
+      <label class="buy-type-label">購買類型
         <select name="stock_type">
           <option value="loose" <%= (product.loose_stock || 0) <= 0 ? 'disabled' : '' %>>散裝｜剩 <%= product.loose_stock || 0 %></option>
           <option value="box" <%= (product.box_stock || 0) <= 0 ? 'disabled' : '' %>>整箱｜剩 <%= product.box_stock || 0 %></option>
         </select>
       </label>
-      <label>數量</label>
-      <div class="qty-stepper detail-stepper" data-max="<%= product.stock || 0 %>">
-        <button type="button" class="qty-btn qty-minus" <%= product.stock <= 0 ? 'disabled' : '' %>>－</button>
-        <input class="qty-input" type="number" name="quantity" value="1" min="1" max="<%= product.stock %>" inputmode="numeric" <%= product.stock <= 0 ? 'disabled' : '' %>>
-        <button type="button" class="qty-btn qty-plus" <%= product.stock <= 0 ? 'disabled' : '' %>>＋</button>
+      <div class="detail-qty-group">
+        <span class="qty-label">數量</span>
+        <div class="qty-stepper detail-stepper" data-max="<%= product.stock || 0 %>">
+          <button type="button" class="qty-btn qty-minus" <%= product.stock <= 0 ? 'disabled' : '' %>>－</button>
+          <input class="qty-input" type="number" name="quantity" value="1" min="1" max="<%= product.stock %>" inputmode="numeric" <%= product.stock <= 0 ? 'disabled' : '' %>>
+          <button type="button" class="qty-btn qty-plus" <%= product.stock <= 0 ? 'disabled' : '' %>>＋</button>
+        </div>
       </div>
-      <button class="btn" <%= product.stock <= 0 ? 'disabled' : '' %>>加入購物車</button>
+      <div class="detail-action-row">
+        <button class="btn detail-add-btn" <%= product.stock <= 0 ? 'disabled' : '' %>>加入購物車</button>
+        <a class="btn back-btn detail-back-btn" href="javascript:history.back()">← 返回上一頁</a>
+      </div>
     </form>
   </section>
 </main>
