@@ -21,7 +21,7 @@
           <input class="qty-input" type="number" name="quantity" value="1" min="1" max="<%= p.stock || 1 %>" inputmode="numeric" <%= p.stock <= 0 ? 'disabled' : '' %>>
           <button type="button" class="qty-btn qty-plus" <%= p.stock <= 0 ? 'disabled' : '' %>>＋</button>
         </div>
-        <button class="order-btn bj-add-btn quick-add-btn" title="加入購物車" <%= p.stock <= 0 ? 'disabled' : '' %>>加入</button>
+        <button class="order-btn bj-add-btn quick-add-btn" title="加入購物車" <%= p.stock <= 0 ? 'disabled' : '' %>>加入購物車</button>
       </form>
     </div>
   </div>
