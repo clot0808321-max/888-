@@ -1,0 +1,20 @@
+本版修改內容：
+
+1. 客人下單後會扣庫存
+   - 依照購買類型扣「散」或「整箱」庫存
+   - 下單後保留訂單編號成功頁
+   - 2 秒後自動跳 Telegram 客服：https://t.me/TWSHOP888
+
+2. 後台資料永久保存支援
+   - 程式支援 SQLite + /data/uploads
+   - 請務必在 Railway 建立 Volume，Mount Path：/data
+   - Variables：PERSIST_DIR=/data、SQLITE_PATH=/data/shop.sqlite、UPLOAD_DIR=/data/uploads
+   - 只加 Variables 沒有 Volume，資料仍可能在重新部署後消失
+
+3. 庫存分成兩區
+   - 後台商品新增 / 修改：散裝庫存、整箱庫存
+   - 商品管理列表：顯示散裝、整箱、總庫存
+   - 商品前台：顯示散裝與整箱庫存
+   - 商品詳細頁：客人可選擇買「散裝」或「整箱」
+   - 購物車 / 結帳 / 訂單明細會顯示購買類型
+   - 庫存 Excel 會匯出散裝庫存、整箱庫存、總庫存

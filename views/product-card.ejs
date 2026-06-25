@@ -1,5 +1,5 @@
 <article class="catalog-card bj-item" data-name="<%= p.name %>" data-desc="<%= p.description || '' %>" data-cat="<%= p.category_name || '' %>">
-  <a href="/product/<%= p.id %>" class="pic-box bj-pic">
+  <a href="/product/<%= p.id %>" class="pic-box bj-pic" title="點我查看商品詳細">
     <img src="<%= p.image || '/uploads/sample-1.svg' %>" alt="<%= p.name %>">
   </a>
   <div class="catalog-info bj-info">
@@ -8,13 +8,20 @@
     <p class="stock-line <%= p.stock <= 0 ? 'soldout' : '' %>">
       <%= p.stock > 0 ? ('散 ' + (p.loose_stock || 0) + '｜整箱 ' + (p.box_stock || 0)) : '已售完' %>
     </p>
-    <div class="bj-card-bottom">
+    <div class="bj-card-bottom product-buy-row">
       <div class="price-line">$<%= formatPrice(p.price) %><span>/<%= p.unit || '件' %></span></div>
-      <form action="/cart/add" method="post">
+      <form class="quick-cart-form" action="/cart/add?back=1" method="post">
         <input type="hidden" name="product_id" value="<%= p.id %>">
-        <input type="hidden" name="quantity" value="1">
-        <input type="hidden" name="stock_type" value="<%= (p.loose_stock || 0) > 0 ? 'loose' : 'box' %>">
-        <button class="order-btn bj-add-btn" title="加入購物車" <%= p.stock <= 0 ? 'disabled' : '' %>>＋</button>
+        <select class="stock-type-select" name="stock_type" aria-label="庫存類型" <%= p.stock <= 0 ? 'disabled' : '' %>>
+          <option value="loose" <%= (p.loose_stock || 0) <= 0 ? 'disabled' : '' %>>散</option>
+          <option value="box" <%= (p.box_stock || 0) <= 0 ? 'disabled' : '' %>>整箱</option>
+        </select>
+        <div class="qty-stepper" data-max="<%= p.stock || 0 %>">
+          <button type="button" class="qty-btn qty-minus" <%= p.stock <= 0 ? 'disabled' : '' %>>－</button>
+          <input class="qty-input" type="number" name="quantity" value="1" min="1" max="<%= p.stock || 1 %>" inputmode="numeric" <%= p.stock <= 0 ? 'disabled' : '' %>>
+          <button type="button" class="qty-btn qty-plus" <%= p.stock <= 0 ? 'disabled' : '' %>>＋</button>
+        </div>
+        <button class="order-btn bj-add-btn quick-add-btn" title="加入購物車" <%= p.stock <= 0 ? 'disabled' : '' %>>加入</button>
       </form>
     </div>
   </div>

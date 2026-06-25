@@ -363,6 +363,7 @@ app.post('/cart/add', (req, res) => {
   if (currentQty + quantity > available) return res.redirect('/cart?error=stock');
   if (item) item.quantity += quantity;
   else cart.push({ product_id: product.id, name: product.name, price: product.price, image: product.image, unit: product.unit || '件', stock_type: stockType, stock_label: stockLabel(stockType), quantity });
+  if (req.query.back === '1') return res.redirect(req.get('Referrer') || '/#products');
   res.redirect('/cart');
 });
 

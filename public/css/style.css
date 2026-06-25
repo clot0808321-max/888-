@@ -160,3 +160,20 @@ body{background:#fff;color:var(--bj-text)}
 .setting-preview.small img{max-height:120px}.setting-preview.icon img{width:72px;height:72px;border-radius:999px;object-fit:cover}
 .news-static{flex:1;display:flex;align-items:center;background:#ff7a00!important;color:#fff!important;border:0!important;border-radius:0!important;padding:12px 18px!important;font-size:20px;font-weight:900;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media(max-width:430px){.news-static{font-size:18px;padding:10px 12px!important}}
+
+
+/* 商品列表快速加入購物車：+1 / -1 */
+.product-buy-row{display:flex!important;align-items:center!important;gap:6px!important;flex-wrap:wrap!important;}
+.quick-cart-form{display:flex;align-items:center;gap:5px;flex-wrap:nowrap;margin:0;}
+.stock-type-select{height:28px;border:1px solid #ffd1a3;border-radius:8px;background:#fffaf3;color:#9a3412;font-size:12px;font-weight:800;padding:0 4px;max-width:58px;}
+.qty-stepper{display:inline-flex;align-items:center;height:28px;border:1px solid #ffd1a3;border-radius:9px;overflow:hidden;background:#fff;}
+.qty-btn{width:26px;height:28px;border:0;background:#fff3e6;color:#e85d04;font-size:16px;font-weight:900;line-height:1;cursor:pointer;}
+.qty-btn:disabled{opacity:.45;cursor:not-allowed;}
+.qty-input{width:38px;height:28px;border:0;text-align:center;font-size:13px;font-weight:900;color:#333;background:#fff;appearance:textfield;-moz-appearance:textfield;}
+.qty-input::-webkit-outer-spin-button,.qty-input::-webkit-inner-spin-button{appearance:none;-webkit-appearance:none;margin:0;}
+.quick-add-btn{width:auto!important;min-width:42px!important;height:28px!important;border-radius:9px!important;font-size:12px!important;padding:0 8px!important;}
+.back-btn{display:inline-flex;margin-bottom:14px;background:#fff3e6!important;color:#e85d04!important;border:1px solid #ffd1a3!important;box-shadow:none!important;}
+.detail-stepper{width:max-content;height:38px;margin-bottom:12px;}
+.detail-stepper .qty-btn{width:38px;height:38px;font-size:20px;}
+.detail-stepper .qty-input{width:64px;height:38px;font-size:16px;}
+@media(max-width:430px){.product-buy-row{gap:4px!important}.quick-cart-form{gap:3px}.stock-type-select{max-width:52px;font-size:11px}.qty-btn{width:23px}.qty-input{width:32px}.quick-add-btn{min-width:38px!important;font-size:11px!important;padding:0 6px!important}}
